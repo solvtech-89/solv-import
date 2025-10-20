@@ -42,7 +42,7 @@ function App() {
         </div>
         <div className="right">
           <button
-            className="btn btn-ghost"
+            className="btn btn-secondary"
             onClick={() => setShowRegister(true)}
           >
             Daftar
