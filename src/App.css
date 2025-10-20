@@ -1,0 +1,345 @@
+.page-root {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial;
+  color: #1f2937;
+}
+.page-root {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial;
+  color: #1f2937;
+}
+
+/* Page background so white cards stand out */
+body {
+  background: #f3f4f6; /* light gray */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+.site-header .left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.dots {
+  font-size: 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.menu-pop {
+  position: absolute;
+  background: white;
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem;
+  margin-top: 2rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+.menu-pop a {
+  display: block;
+  padding: 0.35rem 0.6rem;
+  color: #111827;
+  text-decoration: none;
+}
+.brand {
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+.right {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn {
+  background: #0ea5a4;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.btn:hover {
+  filter: brightness(0.95);
+}
+.btn-ghost {
+  background: transparent;
+  border: 1px solid #cbd5e1;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+}
+.btn-link {
+  background: transparent;
+  border: none;
+  color: #0ea5a4;
+  cursor: pointer;
+}
+
+.hero {
+  text-align: center;
+  padding: 2rem 0;
+}
+.hero h1 {
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
+}
+.subtitle {
+  color: #475569;
+  margin-bottom: 1rem;
+}
+
+.description-card {
+  background: #fff;
+  border: 1px solid #e6eef0;
+  padding: 1.25rem;
+  border-radius: 10px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.description-card {
+  background: #fff;
+  border: 1px solid #e6eef0;
+  padding: 1.25rem;
+  border-radius: 10px;
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: 0 8px 20px rgba(16, 24, 40, 0.06);
+}
+.desc-title {
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+.desc {
+  color: #374151;
+}
+.community-cta {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+.icon-btn {
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: 1px dashed #9ca3af;
+  background: transparent;
+  cursor: not-allowed;
+}
+.muted {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+.partners {
+  margin-top: 1rem;
+}
+
+.features {
+  margin-top: 2rem;
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+.feature {
+  background: #fff;
+  border: 1px solid #e6eef0;
+  padding: 0.75rem;
+  border-radius: 8px;
+  text-align: left;
+}
+.feature {
+  background: #fff;
+  border: 1px solid #e6eef0;
+  padding: 0.75rem;
+  border-radius: 8px;
+  text-align: left;
+  box-shadow: 0 6px 16px rgba(16, 24, 40, 0.04);
+}
+
+.faq {
+  margin-top: 2rem;
+}
+.faq-card {
+  background: #fff;
+  border: 1px solid #e6eef0;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: left;
+}
+.faq-card {
+  background: #fff;
+  border: 1px solid #e6eef0;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: left;
+  box-shadow: 0 8px 20px rgba(16, 24, 40, 0.05);
+}
+.faq-card .q {
+  font-weight: 700;
+}
+.faq-card .a {
+  margin-bottom: 0.75rem;
+}
+
+.journey {
+  margin-top: 2rem;
+}
+.price-grid {
+  display: grid;
+}
+.pricing-grid {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+.price-card {
+  background: #fff;
+  border: 1px solid #e6eef0;
+  padding: 1rem;
+  border-radius: 8px;
+  width: 220px;
+  text-align: center;
+}
+.price-card.popular {
+  border: 2px solid #0ea5a4;
+}
+.price-card {
+  background: #fff;
+  border: 1px solid #e6eef0;
+  padding: 1rem;
+  border-radius: 8px;
+  width: 220px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(16, 24, 40, 0.06);
+}
+.price-card.popular {
+  border: 2px solid #0ea5a4;
+}
+.price-title {
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+.price-old {
+  text-decoration: line-through;
+  color: #9ca3af;
+}
+.price-new {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 0.25rem 0;
+}
+
+.student-discount {
+  margin-top: 1rem;
+  text-align: center;
+}
+.wa-link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  background: #25d366;
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.site-footer {
+  margin-top: 2rem;
+  text-align: center;
+  color: #6b7280;
+}
+
+/* Modal */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  width: 420px;
+  max-width: 95%;
+}
+.modal {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  width: 420px;
+  max-width: 95%;
+  box-shadow: 0 20px 60px rgba(2, 6, 23, 0.2);
+}
+.modal h3 {
+  margin-top: 0;
+}
+.modal-body {
+  margin-bottom: 0.75rem;
+}
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.btn-google {
+  background: #4285f4;
+}
+.divider {
+  text-align: center;
+  color: #9ca3af;
+}
+.link-btn {
+  background: none;
+  border: none;
+  color: #0ea5a4;
+  cursor: pointer;
+}
+
+input {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+input {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+/* Improve contrast for ghost/outline buttons on light gray background */
+.btn-ghost {
+  background: white;
+  border: 1px solid #d1d5db;
+}
+.btn {
+  box-shadow: 0 6px 18px rgba(14, 165, 164, 0.12);
+}
+
+@media (max-width: 600px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  .pricing-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+}
