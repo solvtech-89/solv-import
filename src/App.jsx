@@ -90,32 +90,20 @@ function App() {
               <circle cx="19" cy="12" r="1.8" fill="#111827" />
             </svg>
           </button>
+          <a className="brand" href="#home">
+            SolvImport
+          </a>
           {showMenu && (
             <nav className="menu-pop" aria-label="primary">
               <a href="#dashboard">
                 Dashboard <span className="badge">New</span>
               </a>
-              <button
-                className="menu-link-btn"
-                onClick={handleAffiliateClick}
-                style={{
-                  width: "100%",
-                  background: "none",
-                  border: "none",
-                  textAlign: "left",
-                  cursor: "pointer",
-                  fontFamily: "inherit",
-                  fontSize: "inherit",
-                }}
-              >
+              <button onClick={handleAffiliateClick}>
                 Affiliate Program <small>(Komisi 16%)</small>
               </button>
               <a href="#contact">Contact Admin</a>
             </nav>
           )}
-          <a className="brand" href="#home">
-            SolvImport
-          </a>
           <nav className="nav" aria-label="main-nav">
             <button
               className="nav-link"
