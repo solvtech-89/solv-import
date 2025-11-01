@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
+import AffiliateDashboard from "./components/AffiliateDashboard";
 
 function Modal({ title, children, onClose }) {
   return (
@@ -19,76 +20,178 @@ function App() {
   const [showMenu, setShowMenu] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentView, setCurrentView] = useState("home"); // 'home' or 'affiliate'
+
+  useEffect(() => {
+    // Smooth scroll behavior
+    document.documentElement.style.scrollBehavior = "smooth";
+
+    // Close menu when clicking outside
+    const handleClickOutside = (event) => {
+      if (showMenu && !event.target.closest(".left")) {
+        setShowMenu(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [showMenu]);
+
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+    setShowLogin(false);
+    setCurrentView("affiliate");
+  };
+
+  const handleSignOut = () => {
+    setIsAuthenticated(false);
+    setCurrentView("home");
+  };
+
+  const handleBackToHome = () => {
+    setCurrentView("home");
+  };
+
+  const handleAffiliateClick = () => {
+    setCurrentView("affiliate");
+  };
+
+  // Render Affiliate Dashboard if viewing affiliate (no login required)
+  if (currentView === "affiliate") {
+    return (
+      <AffiliateDashboard
+        onSignOut={handleSignOut}
+        onBackToHome={handleBackToHome}
+        isAuthenticated={isAuthenticated}
+      />
+    );
+  }
 
   return (
     <div className="page-root">
-      <header className="site-header">
+      <header className="site-header" role="banner">
         <div className="left">
           <button
             className="dots"
             onClick={() => setShowMenu((s) => !s)}
             aria-label="menu"
+            aria-expanded={showMenu}
           >
-            ⋯
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle cx="5" cy="12" r="1.8" fill="#111827" />
+              <circle cx="12" cy="12" r="1.8" fill="#111827" />
+              <circle cx="19" cy="12" r="1.8" fill="#111827" />
+            </svg>
           </button>
           {showMenu && (
-            <div className="menu-pop">
-              <a href="#dashboard">Dashboard</a>
-              <a href="#affiliate">Affiliate Program (Komisi 16%)</a>
+            <nav className="menu-pop" aria-label="primary">
+              <a href="#dashboard">
+                Dashboard <span className="badge">New</span>
+              </a>
+              <button
+                className="menu-link-btn"
+                onClick={handleAffiliateClick}
+                style={{
+                  width: "100%",
+                  background: "none",
+                  border: "none",
+                  textAlign: "left",
+                  cursor: "pointer",
+                  fontFamily: "inherit",
+                  fontSize: "inherit",
+                }}
+              >
+                Affiliate Program <small>(Komisi 16%)</small>
+              </button>
               <a href="#contact">Contact Admin</a>
-            </div>
+            </nav>
           )}
-          <span className="brand">SolvImport</span>
+          <a className="brand" href="#home">
+            SolvImport
+          </a>
+          <nav className="nav" aria-label="main-nav">
+            <button
+              className="nav-link"
+              onClick={handleAffiliateClick}
+              style={{
+                background: "none",
+                border: "none",
+                color: "var(--accent)",
+                cursor: "pointer",
+                fontSize: "inherit",
+                fontFamily: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              Affiliate
+            </button>
+            <a href="#features">Fasilitas</a>
+          </nav>
         </div>
         <div className="right">
           <button
             className="btn btn-secondary"
             onClick={() => setShowRegister(true)}
+            aria-label="Daftar"
           >
             Daftar
           </button>
-          <button className="btn" onClick={() => setShowLogin(true)}>
+          <button
+            className="btn btn-primary"
+            onClick={() => setShowLogin(true)}
+          >
             Login
           </button>
         </div>
       </header>
 
       <main>
-        <section className="hero">
-          <h1>Selamat Datang Di SolvImport</h1>
-          <p className="subtitle">
-            Tempat dimana kamu bisa berkembang dan maju
-          </p>
-
-          <div className="description-card">
-            <p className="desc-title">SolvImport</p>
-            <p className="desc">
-              SolvImport merupakan sebuah wadah yang menjadikan anak muda, serta
-              orang tua menjadi seorang pengusaha dan tempat yang menghubungkan
-              Pengusaha tersebut dengan semua hal yang dibutuhkan untuk memulai
-              untuk menjadi seorang Pengusaha — mulai dari Edukasi, alat tempur
-              untuk menjadi bekal memulai usaha, jaringan dan mendapatkan
-              informasi bermacam-macam supplier.
-            </p>
-
-            <div className="community-cta">
-              <button className="icon-btn" title="Gabung Komunitas (berbayar)">
-                🔒 Grup Komunitas
-              </button>
-              <p className="muted">
-                Icon dapat diklik setelah membayar kelas tersebut.
+        <section className="hero" id="home">
+          <div className="hero-grid">
+            <div className="hero-content">
+              <h1>Selamat Datang Di SolvImport</h1>
+              <p className="subtitle">
+                Tempat dimana kamu bisa berkembang dan maju
               </p>
+              <p className="lead">
+                SolvImport membantu pemula menjadi pengusaha melalui edukasi,
+                jaringan supplier internasional, dan dukungan operasional.
+              </p>
+              <div className="hero-ctas">
+                <button className="btn btn-primary">Gabung Sekarang</button>
+                <button className="btn btn-ghost">Pelajari Lebih Lanjut</button>
+              </div>
+              <div className="partners-inline">
+                <small>
+                  “Kami Telah berkerjasama dengan berbagai supplier di Luar
+                  Negeri”
+                </small>
+                <button className="btn btn-link">
+                  Cek Fasilitas & Benefit ⌄
+                </button>
+              </div>
             </div>
 
-            <div className="partners">
-              <p>
-                “Kami Telah berkerjasama dengan berbagai supplier di Luar
-                Negeri”
+            <aside className="hero-card">
+              <div className="desc-title">SolvImport</div>
+              <p className="desc">
+                Wadah yang menghubungkan calon pengusaha dengan edukasi, alat,
+                jaringan supplier, dan komunitas untuk memulai usaha.
               </p>
-              <button className="btn btn-link">
-                Cek Fasilitas & Benefit yang kami berikan ⌄
-              </button>
-            </div>
+              <div className="community-cta">
+                <button className="icon-btn primary">
+                  🔒 Gabung Komunitas
+                </button>
+                <p className="muted">(Tersedia setelah pembelian kelas)</p>
+              </div>
+            </aside>
           </div>
         </section>
 
@@ -96,25 +199,49 @@ function App() {
           <h2>Fasilitas ketika sudah menjadi member</h2>
           <div className="features-grid">
             <div className="feature">
-              1. Edukasi secara berurutan sampai menjadi pengusaha yang expert.
+              <span className="fi">🎓</span>
+              <div>Edukasiterstruktur sampai menjadi expert</div>
             </div>
             <div className="feature">
-              2. Akses jaringan supplier tangan pertama diluar negeri.
+              <span className="fi">🌐</span>
+              <div>Akses jaringan supplier tangan pertama</div>
             </div>
             <div className="feature">
-              3. Edukasi melalui Google Meet atau Zoom.
+              <span className="fi">💻</span>
+              <div>Edukasi via Google Meet/Zoom</div>
             </div>
-            <div className="feature">4. Edukasi melalui Whatsapp.</div>
-            <div className="feature">5. E-Sertifikat.</div>
-            <div className="feature">6. Free Merchandise SolvImport.</div>
-            <div className="feature">7. Akses Kemitraan Khusus.</div>
-            <div className="feature">8. Modul Bisnis Basic-Expert.</div>
-            <div className="feature">9. Akses Webinar setiap Batch gratis.</div>
             <div className="feature">
-              10. Cashback hingga ratusan ribu hingga jutaan disetiap
-              pembelanjaan.
+              <span className="fi">📱</span>
+              <div>Edukasi via WhatsApp</div>
             </div>
-            <div className="feature">11. Akses Komunitas seumur hidup.</div>
+            <div className="feature">
+              <span className="fi">📜</span>
+              <div>E-Sertifikat</div>
+            </div>
+            <div className="feature">
+              <span className="fi">🎁</span>
+              <div>Free Merchandise SolvImport</div>
+            </div>
+            <div className="feature">
+              <span className="fi">🤝</span>
+              <div>Akses Kemitraan Khusus</div>
+            </div>
+            <div className="feature">
+              <span className="fi">📚</span>
+              <div>Modul Bisnis Basic-Expert</div>
+            </div>
+            <div className="feature">
+              <span className="fi">🎤</span>
+              <div>Akses Webinar setiap batch</div>
+            </div>
+            <div className="feature">
+              <span className="fi">💸</span>
+              <div>Cashback hingga ratusan ribu hingga jutaan</div>
+            </div>
+            <div className="feature">
+              <span className="fi">🧑‍🤝‍🧑</span>
+              <div>Akses komunitas seumur hidup</div>
+            </div>
           </div>
         </section>
 
@@ -159,27 +286,33 @@ function App() {
 
           <div className="pricing-grid">
             <div className="price-card">
-              <div className="price-title">Basic</div>
-              <div className="price-duration">Akses 3 Bulan</div>
-              <div className="price-old">699k</div>
-              <div className="price-new">299k</div>
-              <button className="btn">Pilih Basic</button>
+              <div className="price-badge">
+                <div className="price-title">Basic</div>
+                <div className="price-duration">Akses 3 Bulan</div>
+                <div className="price-old">699k</div>
+                <div className="price-new">299k</div>
+                <button className="btn">Pilih Basic</button>
+              </div>
             </div>
 
             <div className="price-card popular">
-              <div className="price-title">Intermediate</div>
-              <div className="price-duration">Akses 6 Bulan</div>
-              <div className="price-old">999k</div>
-              <div className="price-new">499k</div>
-              <button className="btn">Pilih Intermediate</button>
+              <div className="price-badge">
+                <div className="price-title">Intermediate</div>
+                <div className="price-duration">Akses 6 Bulan</div>
+                <div className="price-old">999k</div>
+                <div className="price-new">499k</div>
+                <button className="btn">Pilih Intermediate</button>
+              </div>
             </div>
 
             <div className="price-card">
-              <div className="price-title">Advance</div>
-              <div className="price-duration">Akses Life Time</div>
-              <div className="price-old">1.999k</div>
-              <div className="price-new">999k</div>
-              <button className="btn">Pilih Advance</button>
+              <div className="price-badge">
+                <div className="price-title">Advance</div>
+                <div className="price-duration">Akses Life Time</div>
+                <div className="price-old">1.999k</div>
+                <div className="price-new">999k</div>
+                <button className="btn">Pilih Advance</button>
+              </div>
             </div>
           </div>
 
@@ -221,11 +354,15 @@ function App() {
         >
           <p>Selamat datang kembali! Silahkan masuk untuk melanjutkan.</p>
           <div className="modal-actions">
-            <button className="btn btn-google">Lanjutkan dengan Google</button>
+            <button className="btn btn-google" onClick={handleLogin}>
+              Lanjutkan dengan Google
+            </button>
             <div className="divider">atau</div>
             <input placeholder="Alamat Email" />
             <input placeholder="Kata sandi" type="password" />
-            <button className="btn">Lanjutkan</button>
+            <button className="btn" onClick={handleLogin}>
+              Lanjutkan
+            </button>
           </div>
           <p className="muted">
             Belum punya akun?{" "}
