@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function ReferralCodeDetail({ code, onBack, referralCodes }) {
+function AffiliateLinkDetail({ link, onBack, affiliateLinks }) {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -11,13 +11,15 @@ function ReferralCodeDetail({ code, onBack, referralCodes }) {
   }, [copied]);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(code.code);
+    navigator.clipboard.writeText(link.link);
     setCopied(true);
   };
 
-  // Calculate statistics (dummy data for now)
-  const totalUsages = code.totalUsages || 0;
-  const totalCommission = code.totalCommission || 0;
+  // Statistics
+  const totalClicks = link.totalClicks || 0;
+  const totalSignups = link.totalSignups || 0;
+  const totalCommission = link.totalCommission || 0;
+  const conversionRate = totalClicks > 0 ? ((totalSignups / totalClicks) * 100).toFixed(2) : 0;
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -33,7 +35,7 @@ function ReferralCodeDetail({ code, onBack, referralCodes }) {
   };
 
   return (
-    <div className="referral-code-detail">
+    <div className="affiliate-link-detail">
       <div className="detail-header">
         <button className="btn-back" onClick={onBack}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -42,20 +44,20 @@ function ReferralCodeDetail({ code, onBack, referralCodes }) {
           Back
         </button>
         <div>
-          <h1>{code.name || "Unnamed Code"}</h1>
+          <h1>{link.name || "Unnamed Link"}</h1>
           <p className="page-subtitle">
-            Referral code details and usage statistics
+            Affiliate link details and performance statistics
           </p>
         </div>
       </div>
 
-      <div className="code-info-section">
-        <h2>Code Information</h2>
+      <div className="link-info-section">
+        <h2>Affiliate Link Information</h2>
         <div className="info-grid">
-          <div className="info-item">
-            <label>Referral Code</label>
-            <div className="code-display-row">
-              <div className="code-value-large">{code.code}</div>
+          <div className="info-item full-width">
+            <label>Affiliate Link</label>
+            <div className="link-display-row">
+              <div className="link-value-large">{link.link}</div>
               <button
                 className={`btn btn-copy-large ${copied ? "copied" : ""}`}
                 onClick={handleCopy}
@@ -64,45 +66,59 @@ function ReferralCodeDetail({ code, onBack, referralCodes }) {
                   <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                   <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                 </svg>
-                {copied ? "Copied!" : "Copy Code"}
+                {copied ? "Copied!" : "Copy Link"}
               </button>
             </div>
           </div>
           <div className="info-item">
-            <label>Discount</label>
-            <div className="info-value">5% commission</div>
+            <label>Affiliate Code</label>
+            <div className="info-value-code">{link.code}</div>
+          </div>
+          <div className="info-item">
+            <label>Commission Rate</label>
+            <div className="info-value-commission">{link.commissionRate}%</div>
           </div>
           <div className="info-item">
             <label>Type</label>
-            <span className="type-badge">MEMBER</span>
+            <span className="type-badge">{link.type}</span>
           </div>
           <div className="info-item">
             <label>Created</label>
-            <div className="info-value">{formatDate(code.createdAt)}</div>
+            <div className="info-value">{formatDate(link.createdAt)}</div>
           </div>
         </div>
       </div>
 
       <div className="stats-section">
         <div className="stat-card">
-          <div className="stat-value">{totalUsages}</div>
-          <div className="stat-label">Total Usages</div>
-          <div className="stat-desc">Times your code was used</div>
+          <div className="stat-value">{totalClicks}</div>
+          <div className="stat-label">Total Clicks</div>
+          <div className="stat-desc">Number of clicks on your affiliate link</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-value">{totalSignups}</div>
+          <div className="stat-label">Total Signups</div>
+          <div className="stat-desc">Successful registrations through your link</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-value">{conversionRate}%</div>
+          <div className="stat-label">Conversion Rate</div>
+          <div className="stat-desc">Signups per clicks percentage</div>
         </div>
         <div className="stat-card">
           <div className="stat-value">Rp {totalCommission.toLocaleString()}</div>
           <div className="stat-label">Total Commission</div>
-          <div className="stat-desc">5% of order values</div>
+          <div className="stat-desc">Earned from successful referrals</div>
         </div>
       </div>
 
       <div className="usage-history-section">
-        <h2>Usage History</h2>
-        {totalUsages === 0 ? (
+        <h2>Referral History</h2>
+        {totalSignups === 0 ? (
           <div className="empty-state">
-            <p>No usage history yet</p>
+            <p>No referral history yet</p>
             <p className="empty-desc">
-              Share your code to start earning commissions!
+              Share your affiliate link to start earning commissions! Every successful referral brings you {link.commissionRate}% commission.
             </p>
           </div>
         ) : (
@@ -115,4 +131,4 @@ function ReferralCodeDetail({ code, onBack, referralCodes }) {
   );
 }
 
-export default ReferralCodeDetail;
+export default AffiliateLinkDetail;

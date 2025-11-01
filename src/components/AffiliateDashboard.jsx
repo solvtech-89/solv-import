@@ -1,42 +1,45 @@
 import { useState } from "react";
-import ReferralCodes from "./ReferralCodes";
-import ReferralCodeDetail from "./ReferralCodeDetail";
+import AffiliateLinks from "./AffiliateLinks";
+import AffiliateLinkDetail from "./AffiliateLinkDetail";
 
 // Mock data - replace with actual API calls
-const mockReferralCodes = [
+const mockAffiliateLinks = [
   {
     id: 1,
+    link: "https://solvimport.com/ref/RI7UMP87",
     code: "RI7UMP87",
-    name: "Unnamed Code",
+    name: "Unnamed Link",
     createdDate: "8/9/2025",
     createdAt: "2025-08-09T11:39:53",
     type: "MEMBER",
-    totalUsages: 0,
+    commissionRate: 16,
+    totalClicks: 0,
+    totalSignups: 0,
     totalCommission: 0,
   },
 ];
 
 function AffiliateDashboard({ onSignOut, onBackToHome, isAuthenticated = false }) {
-  const [activePage, setActivePage] = useState("referral-codes");
-  const [selectedCodeId, setSelectedCodeId] = useState(null);
-  const [referralCodes] = useState(mockReferralCodes);
+  const [activePage, setActivePage] = useState("affiliate-links");
+  const [selectedLinkId, setSelectedLinkId] = useState(null);
+  const [affiliateLinks] = useState(mockAffiliateLinks);
 
-  const selectedCode = referralCodes.find((c) => c.id === selectedCodeId);
+  const selectedLink = affiliateLinks.find((l) => l.id === selectedLinkId);
 
-  const handleViewDetail = (codeId) => {
-    setSelectedCodeId(codeId);
-    setActivePage("code-detail");
+  const handleViewDetail = (linkId) => {
+    setSelectedLinkId(linkId);
+    setActivePage("link-detail");
   };
 
   const handleBack = () => {
-    setSelectedCodeId(null);
-    setActivePage("referral-codes");
+    setSelectedLinkId(null);
+    setActivePage("affiliate-links");
   };
 
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: "📊" },
     { id: "payment", label: "Payment", icon: "💳" },
-    { id: "referral-codes", label: "Referral Codes", icon: "🔗" },
+    { id: "affiliate-links", label: "Affiliate Links", icon: "🔗" },
     { id: "profile", label: "Profile", icon: "👤" },
   ];
 
@@ -54,9 +57,9 @@ function AffiliateDashboard({ onSignOut, onBackToHome, isAuthenticated = false }
                 activePage === item.id ? "active" : ""
               }`}
               onClick={() => {
-                if (item.id === "referral-codes") {
-                  setActivePage("referral-codes");
-                  setSelectedCodeId(null);
+                if (item.id === "affiliate-links") {
+                  setActivePage("affiliate-links");
+                  setSelectedLinkId(null);
                 } else {
                   setActivePage(item.id);
                 }
@@ -81,17 +84,17 @@ function AffiliateDashboard({ onSignOut, onBackToHome, isAuthenticated = false }
       </aside>
 
       <main className="dashboard-main">
-        {activePage === "referral-codes" && !selectedCodeId && (
-          <ReferralCodes
+        {activePage === "affiliate-links" && !selectedLinkId && (
+          <AffiliateLinks
             onViewDetail={handleViewDetail}
-            referralCodes={referralCodes}
+            affiliateLinks={affiliateLinks}
           />
         )}
-        {activePage === "code-detail" && selectedCode && (
-          <ReferralCodeDetail
-            code={selectedCode}
+        {activePage === "link-detail" && selectedLink && (
+          <AffiliateLinkDetail
+            link={selectedLink}
             onBack={handleBack}
-            referralCodes={referralCodes}
+            affiliateLinks={affiliateLinks}
           />
         )}
         {(activePage === "dashboard" ||
