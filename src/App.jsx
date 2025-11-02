@@ -22,6 +22,7 @@ function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentView, setCurrentView] = useState("home"); // 'home' or 'affiliate'
+  const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
   useEffect(() => {
     // Smooth scroll behavior
@@ -29,7 +30,11 @@ function App() {
 
     // Close menu when clicking outside
     const handleClickOutside = (event) => {
-      if (showMenu && !event.target.closest(".left")) {
+      if (
+        showMenu &&
+        !event.target.closest(".header-left") &&
+        !event.target.closest(".mobile-menu")
+      ) {
         setShowMenu(false);
       }
     };
@@ -71,72 +76,133 @@ function App() {
   return (
     <div className="page-root">
       <header className="site-header" role="banner">
-        <div className="left">
-          <button
-            className="dots"
-            onClick={() => setShowMenu((s) => !s)}
-            aria-label="menu"
-            aria-expanded={showMenu}
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <circle cx="5" cy="12" r="1.8" fill="#111827" />
-              <circle cx="12" cy="12" r="1.8" fill="#111827" />
-              <circle cx="19" cy="12" r="1.8" fill="#111827" />
-            </svg>
-          </button>
-          <a className="brand" href="#home">
-            SolvImport
-          </a>
-          {showMenu && (
-            <nav className="menu-pop" aria-label="primary">
-              <a href="#dashboard">
-                Dashboard <span className="badge">New</span>
-              </a>
-              <button onClick={handleAffiliateClick}>
-                Affiliate Program <small>(Komisi 16%)</small>
-              </button>
-              <a href="#contact">Contact Admin</a>
-            </nav>
-          )}
-          <nav className="nav" aria-label="main-nav">
+        <div className="header-container">
+          <div className="header-left">
             <button
-              className="nav-link"
-              onClick={handleAffiliateClick}
-              style={{
-                background: "none",
-                border: "none",
-                color: "var(--accent)",
-                cursor: "pointer",
-                fontSize: "inherit",
-                fontFamily: "inherit",
-                textDecoration: "none",
+              className="menu-toggle"
+              onClick={() => setShowMenu((s) => !s)}
+              aria-label="menu"
+              aria-expanded={showMenu}
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                {showMenu ? (
+                  <path
+                    d="M18 6L6 18M6 6l12 12"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                ) : (
+                  <>
+                    <path
+                      d="M4 6h16M4 12h16M4 18h16"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </>
+                )}
+              </svg>
+            </button>
+            <a
+              className="brand"
+              href="#home"
+              onClick={(e) => {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: "smooth" });
               }}
             >
+              <span className="brand-text">SolvImport</span>
+            </a>
+            {showMenu && (
+              <nav className="mobile-menu" aria-label="primary">
+                <a
+                  href="#features"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document
+                      .getElementById("features")
+                      ?.scrollIntoView({ behavior: "smooth" });
+                    setShowMenu(false);
+                  }}
+                >
+                  Fasilitas
+                </a>
+                <button
+                  onClick={() => {
+                    handleAffiliateClick();
+                    setShowMenu(false);
+                  }}
+                >
+                  Affiliate Program
+                  <small>(Komisi 16%)</small>
+                </button>
+                <a
+                  href="#pricing"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document
+                      .getElementById("pricing")
+                      ?.scrollIntoView({ behavior: "smooth" });
+                    setShowMenu(false);
+                  }}
+                >
+                  Pricing
+                </a>
+                <a
+                  href="#faq"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document
+                      .getElementById("faq")
+                      ?.scrollIntoView({ behavior: "smooth" });
+                    setShowMenu(false);
+                  }}
+                >
+                  FAQ
+                </a>
+              </nav>
+            )}
+          </div>
+          <nav className="header-nav" aria-label="main-nav">
+            <a
+              href="#features"
+              onClick={(e) => {
+                e.preventDefault();
+                document
+                  .getElementById("features")
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
+              Fasilitas
+            </a>
+            <button className="nav-link-button" onClick={handleAffiliateClick}>
               Affiliate
             </button>
-            <a href="#features">Fasilitas</a>
           </nav>
-        </div>
-        <div className="right">
-          <button
-            className="btn btn-secondary"
-            onClick={() => setShowRegister(true)}
-            aria-label="Daftar"
-          >
-            Daftar
-          </button>
-          <button
-            className="btn btn-primary"
-            onClick={() => setShowLogin(true)}
-          >
-            Login
-          </button>
+          <div className="header-actions">
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowRegister(true)}
+              aria-label="Daftar"
+            >
+              Daftar
+            </button>
+            <button
+              className="btn btn-primary"
+              onClick={() => setShowLogin(true)}
+            >
+              Login
+            </button>
+          </div>
         </div>
       </header>
 
@@ -146,11 +212,12 @@ function App() {
             <div className="hero-content">
               <h1>Selamat Datang Di SolvImport</h1>
               <p className="subtitle">
-                Tempat dimana kamu bisa berkembang dan maju
+                Platform untuk mengembangkan bisnis Anda ke level berikutnya
               </p>
               <p className="lead">
-                SolvImport membantu pemula menjadi pengusaha melalui edukasi,
-                jaringan supplier internasional, dan dukungan operasional.
+                SolvImport membantu pemula menjadi pengusaha sukses melalui
+                program edukasi terstruktur, akses ke jaringan supplier
+                internasional, dan dukungan operasional yang komprehensif.
               </p>
               <div className="hero-ctas">
                 <button className="btn btn-primary">Gabung Sekarang</button>
@@ -158,117 +225,204 @@ function App() {
               </div>
               <div className="partners-inline">
                 <small>
-                  “Kami Telah berkerjasama dengan berbagai supplier di Luar
-                  Negeri”
+                  Telah dipercaya oleh berbagai supplier terkemuka di luar
+                  negeri
                 </small>
-                <button className="btn btn-link">
-                  Cek Fasilitas & Benefit ⌄
+                <button
+                  className="btn btn-link"
+                  onClick={() =>
+                    document
+                      .getElementById("features")
+                      ?.scrollIntoView({ behavior: "smooth" })
+                  }
+                >
+                  Lihat Fasilitas & Benefit ⌄
                 </button>
               </div>
             </div>
 
             <aside className="hero-card">
-              <div className="desc-title">SolvImport</div>
+              <div className="desc-title">Tentang SolvImport</div>
               <p className="desc">
-                Wadah yang menghubungkan calon pengusaha dengan edukasi, alat,
-                jaringan supplier, dan komunitas untuk memulai usaha.
+                Platform profesional yang menghubungkan calon pengusaha dengan
+                edukasi bisnis berkualitas, akses ke alat bisnis modern,
+                jaringan supplier terpercaya, dan komunitas entrepreneur untuk
+                memulai perjalanan bisnis Anda.
               </p>
               <div className="community-cta">
                 <button className="icon-btn primary">
-                  🔒 Gabung Komunitas
+                  🔒 Gabung Komunitas Eksklusif
                 </button>
-                <p className="muted">(Tersedia setelah pembelian kelas)</p>
+                <p className="muted">Akses tersedia setelah pembelian kelas</p>
               </div>
             </aside>
           </div>
         </section>
 
-        <section className="features">
-          <h2>Fasilitas ketika sudah menjadi member</h2>
+        <section className="features" id="features">
+          <h2>Fasilitas Lengkap untuk Member</h2>
           <div className="features-grid">
             <div className="feature">
               <span className="fi">🎓</span>
-              <div>Edukasiterstruktur sampai menjadi expert</div>
+              <div>Program Edukasi Terstruktur dari Basic hingga Expert</div>
             </div>
             <div className="feature">
               <span className="fi">🌐</span>
-              <div>Akses jaringan supplier tangan pertama</div>
+              <div>Akses Eksklusif ke Jaringan Supplier Internasional</div>
             </div>
             <div className="feature">
               <span className="fi">💻</span>
-              <div>Edukasi via Google Meet/Zoom</div>
+              <div>Kelas Interaktif via Google Meet & Zoom</div>
             </div>
             <div className="feature">
               <span className="fi">📱</span>
-              <div>Edukasi via WhatsApp</div>
+              <div>Pendampingan Real-time via WhatsApp</div>
             </div>
             <div className="feature">
               <span className="fi">📜</span>
-              <div>E-Sertifikat</div>
+              <div>Sertifikat Digital yang Diakui</div>
             </div>
             <div className="feature">
               <span className="fi">🎁</span>
-              <div>Free Merchandise SolvImport</div>
+              <div>Merchandise Eksklusif SolvImport Gratis</div>
             </div>
             <div className="feature">
               <span className="fi">🤝</span>
-              <div>Akses Kemitraan Khusus</div>
+              <div>Peluang Kemitraan Bisnis Khusus</div>
             </div>
             <div className="feature">
               <span className="fi">📚</span>
-              <div>Modul Bisnis Basic-Expert</div>
+              <div>Modul Pembelajaran Comprehensive Basic-Expert</div>
             </div>
             <div className="feature">
               <span className="fi">🎤</span>
-              <div>Akses Webinar setiap batch</div>
+              <div>Webinar Eksklusif Setiap Batch</div>
             </div>
             <div className="feature">
               <span className="fi">💸</span>
-              <div>Cashback hingga ratusan ribu hingga jutaan</div>
+              <div>Program Cashback hingga Jutaan Rupiah</div>
             </div>
             <div className="feature">
               <span className="fi">🧑‍🤝‍🧑</span>
-              <div>Akses komunitas seumur hidup</div>
+              <div>Komunitas Entrepreneur Seumur Hidup</div>
             </div>
           </div>
         </section>
 
-        <section className="faq">
-          <h2>Pertanyaan yang sering diajukan</h2>
-          <div className="faq-card">
-            <p className="q">
-              Saya seorang pemula dan dari 0 yang ingin memulai bisnis. Apakah
-              SolImport cocok untuk saya?
-            </p>
-            <p className="a">
-              SolImport merupakan sebuah tempat yang diciptakan benar-benar
-              untuk pemula yang belum tau mau mulai dari mana memulai bisnis
-              atau menjadi seorang pengusaha. Kami menyediakan fasilitas B2B
-              yang cukup untuk sebagai titik awal kalian memulai bisnis.
-            </p>
+        <section className="faq" id="faq">
+          <h2>Pertanyaan yang Sering Diajukan</h2>
+          <div className="faq-list">
+            <div
+              className={`faq-accordion ${openFaqIndex === 0 ? "open" : ""}`}
+              onClick={() => setOpenFaqIndex(openFaqIndex === 0 ? null : 0)}
+            >
+              <div className="faq-question">
+                <span>
+                  Saya seorang pemula dan dari 0 yang ingin memulai bisnis.
+                  Apakah SolvImport cocok untuk saya?
+                </span>
+                <svg
+                  className="faq-icon"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path
+                    d="M6 9l6 6 6-6"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+              <div className="faq-answer">
+                <p>
+                  SolvImport dirancang khusus untuk pemula yang ingin memulai
+                  bisnis dari nol. Kami menyediakan program edukasi terstruktur,
+                  akses ke supplier, dan dukungan operasional yang diperlukan
+                  sebagai fondasi kuat untuk memulai perjalanan bisnis Anda.
+                </p>
+              </div>
+            </div>
 
-            <p className="q">
-              Bisakah saya menjadi Brand Owner sesudah bergabung di SolImport?
-            </p>
-            <p className="a">
-              SolImport akan menjamin ketika mengikuti semua arahan disini dan
-              mengusai apa yang disampaikan mentor, maka seseorang tersebut akan
-              menjadi Brand Owner (Pemilik dari bisnis mereka).
-            </p>
+            <div
+              className={`faq-accordion ${openFaqIndex === 1 ? "open" : ""}`}
+              onClick={() => setOpenFaqIndex(openFaqIndex === 1 ? null : 1)}
+            >
+              <div className="faq-question">
+                <span>
+                  Bisakah saya menjadi Brand Owner setelah bergabung di
+                  SolvImport?
+                </span>
+                <svg
+                  className="faq-icon"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path
+                    d="M6 9l6 6 6-6"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+              <div className="faq-answer">
+                <p>
+                  Ya, SolvImport berkomitmen untuk membantu member menjadi Brand
+                  Owner yang mandiri. Dengan mengikuti program edukasi secara
+                  konsisten dan menerapkan pembelajaran dari mentor, Anda akan
+                  memiliki pengetahuan dan jaringan yang diperlukan untuk
+                  menjadi pemilik bisnis sendiri.
+                </p>
+              </div>
+            </div>
 
-            <p className="q">Bisakah saya menggunakan merk saya sendiri?</p>
-            <p className="a">
-              Bisa, hal itu dapat di realisasikan dengan supplier maupun product
-              dengan berdiskusi dan kesepakatan, karena tidak semua barang
-              maupun brand memperbolehkan merk mereka diganti.
-            </p>
+            <div
+              className={`faq-accordion ${openFaqIndex === 2 ? "open" : ""}`}
+              onClick={() => setOpenFaqIndex(openFaqIndex === 2 ? null : 2)}
+            >
+              <div className="faq-question">
+                <span>Bisakah saya menggunakan merk sendiri?</span>
+                <svg
+                  className="faq-icon"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path
+                    d="M6 9l6 6 6-6"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+              <div className="faq-answer">
+                <p>
+                  Tentu bisa. Penggunaan merk sendiri dapat direalisasikan
+                  melalui diskusi dan kesepakatan dengan supplier maupun brand.
+                  Namun, perlu diketahui bahwa tidak semua produk atau brand
+                  memperbolehkan perubahan merk, tergantung pada kebijakan
+                  masing-masing supplier.
+                </p>
+              </div>
+            </div>
           </div>
         </section>
 
-        <section className="journey">
-          <h2>Mulai Perjalanan & Pengalaman</h2>
+        <section className="journey" id="pricing">
+          <h2>Mulai Perjalanan Bisnis Anda</h2>
           <p className="tag">
-            yang tidak bisa didapatkan ditempat lain bersama SolvImport
+            Pengalaman dan pengetahuan eksklusif yang tidak bisa didapatkan di
+            tempat lain
           </p>
           <p className="motto">Bismillah Jadi Pengusaha</p>
 
