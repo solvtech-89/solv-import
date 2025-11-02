@@ -1,28 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AffiliateLinks from "./AffiliateLinks";
 import AffiliateLinkDetail from "./AffiliateLinkDetail";
-
-// Mock data - replace with actual API calls
-const mockAffiliateLinks = [
-  {
-    id: 1,
-    link: "https://solvimport.com/ref/RI7UMP87",
-    code: "RI7UMP87",
-    name: "Unnamed Link",
-    createdDate: "8/9/2025",
-    createdAt: "2025-08-09T11:39:53",
-    type: "MEMBER",
-    commissionRate: 16,
-    totalClicks: 0,
-    totalSignups: 0,
-    totalCommission: 0,
-  },
-];
+import { 
+  getAffiliateLinks, 
+  refreshLinkStats,
+  createAffiliateLink,
+  deleteAffiliateLink,
+  updateAffiliateLinkName 
+} from "../utils/affiliateUtils";
 
 function AffiliateDashboard({ onSignOut, onBackToHome, isAuthenticated = false }) {
   const [activePage, setActivePage] = useState("affiliate-links");
   const [selectedLinkId, setSelectedLinkId] = useState(null);
-  const [affiliateLinks] = useState(mockAffiliateLinks);
+  const [affiliateLinks, setAffiliateLinks] = useState([]);
+
+  // Load links on mount and refresh stats
+  useEffect(() => {
+    const links = refreshLinkStats();
+    setAffiliateLinks(links);
+    
+    // If no links exist, create a default one
+    if (links.length === 0) {
+      const defaultLink = createAffiliateLink("My First Affiliate Link");
+      setAffiliateLinks([defaultLink]);
+    }
+  }, []);
+
+  // Refresh stats periodically
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const updatedLinks = refreshLinkStats();
+      setAffiliateLinks(updatedLinks);
+    }, 30000); // Refresh every 30 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   const selectedLink = affiliateLinks.find((l) => l.id === selectedLinkId);
 
@@ -34,6 +46,38 @@ function AffiliateDashboard({ onSignOut, onBackToHome, isAuthenticated = false }
   const handleBack = () => {
     setSelectedLinkId(null);
     setActivePage("affiliate-links");
+    // Refresh stats when going back
+    const updatedLinks = refreshLinkStats();
+    setAffiliateLinks(updatedLinks);
+  };
+
+  const handleCreateLink = (name) => {
+    const newLink = createAffiliateLink(name);
+    const updatedLinks = refreshLinkStats();
+    setAffiliateLinks(updatedLinks);
+    return newLink;
+  };
+
+  const handleDeleteLink = (linkId) => {
+    const updatedLinks = deleteAffiliateLink(linkId);
+    setAffiliateLinks(updatedLinks);
+    if (selectedLinkId === linkId) {
+      setSelectedLinkId(null);
+      setActivePage("affiliate-links");
+    }
+  };
+
+  const handleUpdateLinkName = (linkId, newName) => {
+    const updatedLink = updateAffiliateLinkName(linkId, newName);
+    if (updatedLink) {
+      const updatedLinks = refreshLinkStats();
+      setAffiliateLinks(updatedLinks);
+    }
+  };
+
+  const handleRefreshStats = () => {
+    const updatedLinks = refreshLinkStats();
+    setAffiliateLinks(updatedLinks);
   };
 
   const menuItems = [
@@ -88,6 +132,9 @@ function AffiliateDashboard({ onSignOut, onBackToHome, isAuthenticated = false }
           <AffiliateLinks
             onViewDetail={handleViewDetail}
             affiliateLinks={affiliateLinks}
+            onCreateLink={handleCreateLink}
+            onDeleteLink={handleDeleteLink}
+            onRefresh={handleRefreshStats}
           />
         )}
         {activePage === "link-detail" && selectedLink && (
@@ -95,6 +142,8 @@ function AffiliateDashboard({ onSignOut, onBackToHome, isAuthenticated = false }
             link={selectedLink}
             onBack={handleBack}
             affiliateLinks={affiliateLinks}
+            onUpdateName={handleUpdateLinkName}
+            onRefresh={handleRefreshStats}
           />
         )}
         {(activePage === "dashboard" ||

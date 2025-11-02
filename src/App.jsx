@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import AffiliateDashboard from "./components/AffiliateDashboard";
+import {
+  checkReferralCode,
+  getStoredReferralCode,
+  trackSignup,
+  clearReferralCode,
+} from "./utils/affiliateUtils";
 
 function Modal({ title, children, onClose }) {
   return (
@@ -28,6 +34,9 @@ function App() {
     // Smooth scroll behavior
     document.documentElement.style.scrollBehavior = "smooth";
 
+    // Check for referral code in URL
+    checkReferralCode();
+
     // Close menu when clicking outside
     const handleClickOutside = (event) => {
       if (
@@ -44,6 +53,14 @@ function App() {
   }, [showMenu]);
 
   const handleLogin = () => {
+    // Track signup/login if there's a referral code
+    const refCode = getStoredReferralCode();
+    if (refCode) {
+      trackSignup(refCode);
+      clearReferralCode();
+      alert(`🎉 Terima kasih! Referral dari kode ${refCode} telah dicatat.`);
+    }
+
     setIsAuthenticated(true);
     setShowLogin(false);
     setCurrentView("affiliate");
@@ -479,12 +496,58 @@ function App() {
       {showRegister && (
         <Modal title="Buat akun Anda" onClose={() => setShowRegister(false)}>
           <p>Selamat Datang! Silahkan isi detailnya untuk memulai.</p>
+          {getStoredReferralCode() && (
+            <div
+              style={{
+                padding: "0.75rem 1rem",
+                background: "var(--accent-gradient-soft)",
+                borderRadius: "var(--radius-lg)",
+                marginBottom: "1rem",
+                fontSize: "0.875rem",
+                color: "var(--text-secondary)",
+              }}
+            >
+              ✨ Anda datang melalui referral link! Komisi akan dicatat setelah
+              registrasi.
+            </div>
+          )}
           <div className="modal-actions">
-            <button className="btn btn-google">Lanjutkan dengan Google</button>
+            <button
+              className="btn btn-google"
+              onClick={() => {
+                const refCode = getStoredReferralCode();
+                if (refCode) {
+                  trackSignup(refCode);
+                  clearReferralCode();
+                }
+                setShowRegister(false);
+                setIsAuthenticated(true);
+                setCurrentView("affiliate");
+              }}
+            >
+              Lanjutkan dengan Google
+            </button>
             <div className="divider">atau</div>
             <input placeholder="Alamat Email" />
             <input placeholder="Kata sandi" type="password" />
-            <button className="btn">Lanjutkan</button>
+            <button
+              className="btn"
+              onClick={() => {
+                const refCode = getStoredReferralCode();
+                if (refCode) {
+                  trackSignup(refCode);
+                  clearReferralCode();
+                  alert(
+                    `🎉 Terima kasih! Referral dari kode ${refCode} telah dicatat.`
+                  );
+                }
+                setShowRegister(false);
+                setIsAuthenticated(true);
+                setCurrentView("affiliate");
+              }}
+            >
+              Lanjutkan
+            </button>
           </div>
         </Modal>
       )}
